@@ -3,6 +3,7 @@ package gui.formularioInicio.Administracion.formulariosMedico;
 import Service.serviceExeption;
 import Service.serviceMedico;
 import entidades.Medico;
+import entidades.ObraSocial;
 import gui.PanelManager;
 
 import javax.swing.*;
@@ -40,12 +41,12 @@ public class FormularioMedicoAgregar extends JPanel {
 
     serviceMedico instance;
 
-    private String ObrasSociales[]={"- Seleccione -","OSDE","Swiss Medical","Galeno","Medicus","Accord Salud","OMINT","OSDIPP","OSPATCA","OSPE","OSPIA","OSPOCE","OSSEG","OSUNLAR","OSUTHGRA","Otro"};
-
+    ObraSocial obraSocial;
 
     public FormularioMedicoAgregar (PanelManager panel){
         this.panel = panel;
         instance = new serviceMedico();
+        obraSocial = new ObraSocial();
         setLayout(new GridBagLayout()); // Establecer GridBagLayout para el panel principal
         armarFormulario();
     }
@@ -54,7 +55,7 @@ public class FormularioMedicoAgregar extends JPanel {
 
         panelAgregar = new JPanel();
         panelSec = new JPanel();
-        panelAgregar.setLayout(new GridLayout(6,2, 5, 5));
+        panelAgregar.setLayout(new GridLayout(6,2, 10, 10));
 
         botonAtras = new JButton("<-");
         botonAtras.setPreferredSize(new Dimension(50, 25));
@@ -72,7 +73,7 @@ public class FormularioMedicoAgregar extends JPanel {
         precioConsultaText = new JTextField(7);
 
         ObraSocial = new JLabel("Obra Social");
-        combo = new JComboBox(ObrasSociales);
+        combo = new JComboBox(obraSocial.getObrasSociales());
 
         botonAgregar = new JButton("Agregar");
 

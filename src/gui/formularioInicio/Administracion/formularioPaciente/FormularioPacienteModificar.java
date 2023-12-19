@@ -36,7 +36,7 @@ public class FormularioPacienteModificar extends JPanel {
         panelModificar = new JPanel();
         panelAtras = new JPanel();
         panelAtras.setLayout(new GridBagLayout());
-        panelModificar.setLayout(new GridLayout(4,2, 5, 5));
+        panelModificar.setLayout(new GridLayout(4,2, 10, 10));
 
         nombre = new JLabel("Nombre");
         nombreText = new JTextField(7);

@@ -62,13 +62,6 @@ public class serviceTurno {
         }
     }
 
-    public ArrayList<Turno> calcularSumaCobrosRangoTodos(Date fechaDesde, Date fechaHasta) throws serviceExeption{
-        try{
-            return daoTurno.calcularSumaCobrosRangoTodos(fechaDesde,fechaHasta);
-        }catch(DAOExeption d){
-            throw new serviceExeption(d.getMessage());
-        }
-    }
     public ArrayList<Turno> calcularSumaCobrosRangoXMedico(Date fechaDesde, Date fechaHasta) throws serviceExeption{
         try{
             return daoTurno.calcularSumaCobrosRangoXMedico(fechaDesde,fechaHasta);

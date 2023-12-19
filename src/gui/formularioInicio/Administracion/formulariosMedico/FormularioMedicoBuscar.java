@@ -38,7 +38,7 @@ public class FormularioMedicoBuscar extends JPanel {
         panelBuscar = new JPanel();
         panelAtras = new JPanel();
         panelAtras.setLayout(new GridBagLayout());
-        panelBuscar.setLayout(new GridBagLayout());
+        panelBuscar.setLayout(new GridLayout(3,1, 10, 10));
 
 
 

@@ -2,6 +2,7 @@ package gui.formularioInicio.Administracion.formularioPaciente;
 
 import Service.serviceExeption;
 import Service.servicePaciente;
+import entidades.ObraSocial;
 import entidades.Paciente;
 import gui.PanelManager;
 
@@ -34,12 +35,15 @@ public class FormularioPacienteAgregar extends JPanel{
 
     JComboBox combo;
 
+    ObraSocial obraSocial;
+
     private String ObrasSociales[]={"- Seleccione -","OSDE","Swiss Medical","Galeno","Medicus","Accord Salud","OMINT","OSDIPP","OSPATCA","OSPE","OSPIA","OSPOCE","OSSEG","OSUNLAR","OSUTHGRA","Otro"};
     servicePaciente instance;
 
     public FormularioPacienteAgregar (PanelManager panel){
         this.panel = panel;
         instance = new servicePaciente();
+        obraSocial = new ObraSocial();
         setLayout(new GridBagLayout());
         armarFormulario();
     }
@@ -48,7 +52,7 @@ public class FormularioPacienteAgregar extends JPanel{
 
             panelAgregar = new JPanel();
             panelSec = new JPanel();
-            panelAgregar.setLayout(new GridLayout(5,2, 5, 5));
+            panelAgregar.setLayout(new GridLayout(5,2, 10, 10));
 
             botonAtras = new JButton("<-");
             botonAtras.setPreferredSize(new Dimension(50, 25));
@@ -63,7 +67,7 @@ public class FormularioPacienteAgregar extends JPanel{
             dniText = new JTextField(7);
 
             ObraSocial = new JLabel("Obra Social");
-            combo = new  JComboBox(ObrasSociales);
+            combo = new  JComboBox(obraSocial.getObrasSociales());
 
             botonAgregar = new JButton("Agregar");
 

@@ -75,9 +75,9 @@ public class FormularioMedicoModificar  extends JPanel {
         panelModificar.add(apellido);
         panelModificar.add(apellidoText);
         panelModificar.add(precioConsulta);
+        panelModificar.add(precioConsultaText);
         panelModificar.add(ObraSocial);
         panelModificar.add(combo);
-        panelModificar.add(precioConsultaText);
         panelModificar.add(botonModificar);
 
         GridBagConstraints gbcModificar = new GridBagConstraints();

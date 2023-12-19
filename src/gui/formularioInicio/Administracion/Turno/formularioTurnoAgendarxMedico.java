@@ -132,24 +132,27 @@ public class formularioTurnoAgendarxMedico extends JPanel {
                 turno.setPaciente(paciente);
                 turno.setHora((Time) hora1.getSelectedItem());
                 turno.setFecha(SelectedDate);
-                turno.setCosto(turno.getMedico().getPrecioConsulta());
-                if (turno.getMedico().getObraSocial().equals(turno.getPaciente().getObraSocial())){
-                    double f= turno.getMedico().getPrecioConsulta();
-                    f -= (f * desc / 100);
-                    turno.setCosto(f);
-                }
-
                 try{
-                    instanceTurno.guardar(turno);
-                    String mensaje = "Turno Agendado: \n" +
-                            "Medico: " + turno.getMedico().getApellido() + "\n" +
-                            "Dni paciente: " + paciente.getId() + "\n" +
-                            "Fecha " + SelectedDate+" , "+hora1.getSelectedItem()+ "\n" +
-                            "Costo:" + turno.getCosto();
-                    JOptionPane.showMessageDialog(null, mensaje);
-                    panel.mostrar(new formularioTurnoIinicio(panel));
-                }catch (serviceExeption ex) {
-                    JOptionPane.showMessageDialog(null, "No se pudo agendar el turno");
+                    turno.setCosto(turno.getMedico().getPrecioConsulta());
+                    if (turno.getMedico().getObraSocial().equals(turno.getPaciente().getObraSocial())){
+                        double f= turno.getMedico().getPrecioConsulta();
+                        f -= (f * desc / 100);
+                        turno.setCosto(f);
+                    }
+                    try{
+                        instanceTurno.guardar(turno);
+                        String mensaje = "Turno Agendado: \n" +
+                                "Medico: " + turno.getMedico().getApellido() + "\n" +
+                                "Dni paciente: " + paciente.getId() + "\n" +
+                                "Fecha " + SelectedDate+" , "+hora1.getSelectedItem()+ "\n" +
+                                "Costo:" + turno.getCosto();
+                        JOptionPane.showMessageDialog(null, mensaje);
+                        panel.mostrar(new formularioTurnoIinicio(panel));
+                    }catch (serviceExeption ex) {
+                        JOptionPane.showMessageDialog(null, "No se pudo agendar el turno");
+                    }
+                }catch(NullPointerException ex){
+                    JOptionPane.showMessageDialog(null, "El medico esta vacio");
                 }
             }
         });
@@ -185,28 +188,27 @@ public class formularioTurnoAgendarxMedico extends JPanel {
         ArrayList<Time> horasMedico = new ArrayList<>();
         ArrayList<Time> horasPaciente = new ArrayList<>();
 
-        // Asegúrate de que la fecha no sea null
         if (fecha.getDate() != null) {
-            LocalDate selectedLocalDate;
-            try {
-                java.util.Date selectedDateUtil = fecha.getDate();
-                selectedLocalDate = selectedDateUtil.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-                horasMedico = instanceTurno.buscarTurnosMedico(medico.getId(), java.sql.Date.valueOf(selectedLocalDate));
-                horasPaciente = instanceTurno.buscarTurnosPaciente(paciente.getId(), java.sql.Date.valueOf(selectedLocalDate));
-            } catch (serviceExeption ex) {
-                throw new RuntimeException(ex);
-            }
-
-            System.out.println(currentDate);
-            System.out.println(selectedLocalDate);
-
-            if (currentDate.equals(selectedLocalDate)) {
-                Iterator<Time> iterator = horarios.iterator();
-                while (iterator.hasNext()) {
-                    Time horaItem = iterator.next();
-                    if (horaItem.before(Time.valueOf(LocalTime.now()))) {
-                        iterator.remove();
+            if (medico == null) {
+                JOptionPane.showMessageDialog(null, "Debe elegir  un medico");
+            }else{
+                LocalDate selectedLocalDate = null;
+                try {
+                    java.util.Date selectedDateUtil = fecha.getDate();
+                    selectedLocalDate = selectedDateUtil.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+                    horasMedico = instanceTurno.buscarTurnosMedico(medico.getId(), java.sql.Date.valueOf(selectedLocalDate));
+                    horasPaciente = instanceTurno.buscarTurnosPaciente(paciente.getId(), java.sql.Date.valueOf(selectedLocalDate));
+                    if (currentDate.equals(selectedLocalDate)) {
+                        Iterator<Time> iterator = horarios.iterator();
+                        while (iterator.hasNext()) {
+                            Time horaItem = iterator.next();
+                            if (horaItem.before(Time.valueOf(LocalTime.now()))) {
+                                iterator.remove();
+                            }
+                        }
                     }
+                } catch (serviceExeption ex) {
+                    JOptionPane.showMessageDialog(null, "Error al agendar turno");
                 }
             }
         }

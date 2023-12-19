@@ -79,7 +79,6 @@ public class formularioReporteInicio extends JPanel {
         ArrayList<Medico>medicos = new ArrayList<>();
         Map<String,Medico> nombreMedicos = new LinkedHashMap<>();
         nombreMedicos.put("Seleccione un medico",null);
-        nombreMedicos.put("Ver RecxMedico",null);
         medicos = instanceMedico.buscarTodos();
 
         for (Medico medicosnombre : medicos){
@@ -174,19 +173,7 @@ public class formularioReporteInicio extends JPanel {
                 java.sql.Date sqlFechadesde = new java.sql.Date(localFechadesde.getTime());
                 java.sql.Date sqlFechaHasta = new java.sql.Date(localFechaHasta.getTime());
 
-                if (medicosCombo.getSelectedIndex() == 0){
-                    try {
-                        ArrayList<Turno> turnos = new ArrayList<>();
-
-                        turnos = instanceTurno.calcularSumaCobrosRangoTodos(sqlFechadesde, sqlFechaHasta);
-
-                        actualizarTabla(turnos);
-                        actualizarTotal(turnos);
-
-                    } catch (serviceExeption ex) {
-                        JOptionPane.showMessageDialog(null, "No se pudo acceder a los datos");
-                    }
-                } else if(medicosCombo.getSelectedIndex() == 1){
+                if(medicosCombo.getSelectedIndex() == 0){
                     try {
                         ArrayList<Turno> turnos = new ArrayList<>();
 
@@ -256,3 +243,45 @@ public class formularioReporteInicio extends JPanel {
         table1.setModel(modelo);
     }
 }
+
+
+/*
+if (medicosCombo.getSelectedIndex() == 0){
+                    try {
+                        ArrayList<Turno> turnos = new ArrayList<>();
+
+                        turnos = instanceTurno.calcularSumaCobrosRangoTodos(sqlFechadesde, sqlFechaHasta);
+
+                        actualizarTabla(turnos);
+                        actualizarTotal(turnos);
+
+                    } catch (serviceExeption ex) {
+                        JOptionPane.showMessageDialog(null, "No se pudo acceder a los datos");
+                    }
+                } else if(medicosCombo.getSelectedIndex() == 1){
+                    try {
+                        ArrayList<Turno> turnos = new ArrayList<>();
+
+                        turnos = instanceTurno.calcularSumaCobrosRangoXMedico(sqlFechadesde, sqlFechaHasta);
+
+                        actualizarTablaxMedico(turnos);
+                        actualizarTotal(turnos);
+
+                    } catch (serviceExeption ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }else  {
+                    try {
+                        int idMedico = nombreMedicos.get(medicosCombo.getSelectedItem()).getId();
+                        ArrayList<Turno> turnos = new ArrayList<>();
+
+                        turnos = instanceTurno.calcularSumaCobrosRango(sqlFechadesde, sqlFechaHasta,idMedico);
+
+                        actualizarTabla(turnos);
+                        actualizarTotal(turnos);
+
+                    } catch (serviceExeption ex) {
+                        JOptionPane.showMessageDialog(null, "No se pudo acceder a los datos");
+                    }
+                }
+*/

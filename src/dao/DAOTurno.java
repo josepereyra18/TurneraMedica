@@ -131,7 +131,7 @@ public class DAOTurno implements IDAO<Turno>{
         try {
             Class.forName(DB_JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-            preparedStatement = connection.prepareStatement("SELECT * FROM TURNO");
+            preparedStatement = connection.prepareStatement("SELECT * FROM TURNO ORDER BY FECHA, HORA");
             ResultSet rs = preparedStatement.executeQuery();
             while(rs.next()){
                 turno = new Turno();
@@ -189,46 +189,6 @@ public class DAOTurno implements IDAO<Turno>{
         } catch (serviceExeption e) {
             throw new RuntimeException(e);
         } finally {
-            try{
-                preparedStatement.close();
-            }catch(SQLException s){
-                throw new DAOExeption("No se pudo conectar");
-            }
-        }
-        return turnos;
-    }
-
-
-    public ArrayList<Turno> calcularSumaCobrosRangoTodos(Date fechaDesde, Date fechaHasta) throws DAOExeption {
-        Connection connection=null;
-        PreparedStatement preparedStatement=null;
-        Turno turno = null;
-        ArrayList<Turno> turnos = new ArrayList<>();
-        serviceMedico medico = new serviceMedico();
-        servicePaciente paciente = new servicePaciente();
-        try{
-            Class.forName(DB_JDBC_DRIVER);
-            connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-            preparedStatement= connection.prepareStatement("SELECT * FROM TURNO  WHERE FECHA BETWEEN ? AND ? GROUP BY IDTURNO ORDER BY FECHA, HORA");
-            preparedStatement.setDate(1, fechaDesde);
-            preparedStatement.setDate(2, fechaHasta);
-            ResultSet rs = preparedStatement.executeQuery();
-            while (rs.next()){
-                turno = new Turno();
-                turno.setMedico(medico.buscar(rs.getInt("IDMEDICO")));
-                turno.setFecha(rs.getDate("FECHA"));
-                turno.setHora(rs.getTime("HORA"));
-                turno.setCosto(rs.getDouble("COSTO"));
-                turno.setPaciente(paciente.buscar(rs.getInt("IDPACIENTE")));
-                turno.setIdTurno(rs.getInt("IDTURNO"));
-                turnos.add(turno);
-            }
-
-        }catch (ClassNotFoundException | SQLException e){
-            throw new DAOExeption("Ocurrio un error en la base de datos");
-        } catch (serviceExeption e) {
-            throw new RuntimeException(e);
-        }finally {
             try{
                 preparedStatement.close();
             }catch(SQLException s){
