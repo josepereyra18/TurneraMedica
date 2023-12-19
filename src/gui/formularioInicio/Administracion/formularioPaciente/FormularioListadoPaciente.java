@@ -1,6 +1,6 @@
-package gui.formulariosMedico;
+package gui.formularioInicio.Administracion.formularioPaciente;
 
-import entidades.Medico;
+import entidades.Paciente;
 import gui.PanelManager;
 
 import javax.swing.*;
@@ -10,8 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class FormularioListadoMedicos extends JPanel{
-
+public class FormularioListadoPaciente extends JPanel {
     PanelManager panel;
     JPanel panelListado;
     JPanel panelAtras;
@@ -19,25 +18,25 @@ public class FormularioListadoMedicos extends JPanel{
     DefaultTableModel modelo;
     JButton botonAtras;
 
-    public FormularioListadoMedicos(PanelManager panel, ArrayList<Medico> medicos){
+    public FormularioListadoPaciente(PanelManager panel, ArrayList<Paciente> pacientes){
         this.panel = panel;
         setLayout(new GridBagLayout());
-        armarFormulario(medicos);
+        armarFormulario(pacientes);
     }
 
-    public void armarFormulario  (ArrayList<Medico> medicos) {
+    public void armarFormulario  (ArrayList<Paciente> pacientes) {
         panelListado = new JPanel();
         panelAtras = new JPanel();
         botonAtras = new JButton("<-");
         panelAtras.add(botonAtras);
         modelo = new DefaultTableModel();
 
-        String[] columnas = {"ID", "Nombre", "Apellido", "Precio Consulta"};
-        //modelo.setColumnIdentifiers(columnas);
+        String[] columnas = {"ID", "Nombre", "Apellido", "Obra Social"};
+
         modelo.setColumnIdentifiers(columnas);
 
-        for (Medico medico : medicos) {
-            modelo.addRow(new Object[]{medico.getId(), medico.getNombre(), medico.getApellido(), medico.getPrecioConsulta()});
+        for (Paciente paciente : pacientes) {
+            modelo.addRow(new Object[]{paciente.getId(), paciente.getNombre(), paciente.getApellido(), paciente.getObraSocial()});
         }
 
         table1 = new JTable(modelo);
@@ -46,7 +45,8 @@ public class FormularioListadoMedicos extends JPanel{
         botonAtras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.mostrar(new FormularioMedicoBuscar(panel));
+
+                panel.mostrar(new FormularioPacienteBuscar(panel));
             }
         });
 
@@ -77,4 +77,5 @@ public class FormularioListadoMedicos extends JPanel{
 
 
     }
+
 }

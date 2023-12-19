@@ -7,7 +7,7 @@ public class Usuario {
     private int id;
     private String nombre;
     private String apellido;
-    private String tipoUsuario;  // SI ES MEDICO O PACIENTE
+    private String ObraSocial;
 
 
 
@@ -16,36 +16,17 @@ public class Usuario {
     //? CONSTRUCTORES
 
     public Usuario(){}
-    public Usuario(int id, String nombre, String apellido) {
+    public Usuario(int id, String nombre, String apellido, String obraSocial) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
+        this.ObraSocial = obraSocial;
     }
 
     public Usuario(String nombre, String apellido,String tipoUsuario) {
         this.nombre = nombre;
         this.apellido = apellido;
-        this.tipoUsuario = tipoUsuario;
     }
-
-
-
-
-    //? METODOS
-
-    public List<Turno> ConsultarTurnos(Date fecha) {
-        return null;
-    }
-    public boolean esMedico (){  // esto se va a utilizar en medico y en paciente
-        return "Medico".equalsIgnoreCase(tipoUsuario);
-    }
-
-    public boolean esPaciente (){
-        return "Paciente".equalsIgnoreCase(tipoUsuario);
-    }
-
-
-
 
 
     //? GETTERS
@@ -59,6 +40,10 @@ public class Usuario {
 
     public String getApellido() {
         return apellido;
+    }
+
+    public String getObraSocial() {
+        return ObraSocial;
     }
 
 
@@ -78,6 +63,9 @@ public class Usuario {
         this.apellido = apellido;
     }
 
+    public void setObraSocial(String obraSocial) {
+        ObraSocial = obraSocial;
+    }
 
     //? TOSTRING
 
@@ -87,7 +75,7 @@ public class Usuario {
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ", tipoUsuario='" + tipoUsuario + '\'' +
                 '}';
     }
+
 }

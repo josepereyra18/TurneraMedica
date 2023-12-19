@@ -15,22 +15,16 @@ public class DAOMedico implements IDAO<Medico>{
     @Override
     public void guardar(Medico elemento) throws DAOExeption {
         Connection connection=null;
-        System.out.println(1);
         PreparedStatement preparedStatement=null;
-        System.out.println(2);
         try {
             Class.forName(DB_JDBC_DRIVER);
-            System.out.println(3);
             connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-            System.out.println(4);
-            preparedStatement= connection.prepareStatement("INSERT INTO MEDICO VALUES(?,?,?,?)");
-            System.out.println(5);
+            preparedStatement= connection.prepareStatement("INSERT INTO MEDICO VALUES(?,?,?,?,?)");
             preparedStatement.setInt(1,elemento.getId());
-            System.out.println(6);
             preparedStatement.setString(2, elemento.getNombre());
             preparedStatement.setString(3, elemento.getApellido());
             preparedStatement.setDouble(4,elemento.getPrecioConsulta());
-            System.out.println(7);
+            preparedStatement.setString(5,elemento.getObraSocial());
             int resultado=preparedStatement.executeUpdate();
             System.out.println("Se agrego " + resultado);
         }
@@ -47,13 +41,17 @@ public class DAOMedico implements IDAO<Medico>{
         try {
             Class.forName(DB_JDBC_DRIVER);
             connection= DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
-            preparedStatement= connection.prepareStatement("UPDATE MEDICO SET NOMBRE=? ,APELLIDO=?, PRECIOCONSULTA=? WHERE IDMEDICO=?");
+            preparedStatement= connection.prepareStatement("UPDATE MEDICO SET NOMBRE=? ,APELLIDO=?, PRECIOCONSULTA=? , OBRASOCIAL=? WHERE IDMEDICO=?");
             preparedStatement.setString(1, elemento.getNombre());
             preparedStatement.setString(2, elemento.getApellido());
             preparedStatement.setDouble(3,elemento.getPrecioConsulta());
-            preparedStatement.setInt(4,elemento.getId());
+            preparedStatement.setString(4,elemento.getObraSocial());
+            preparedStatement.setInt(5,elemento.getId());
+
             int resultado=preparedStatement.executeUpdate();
+
             System.out.println("Se modifico" + resultado);
+
         }
         catch (ClassNotFoundException | SQLException e)
         {
@@ -95,7 +93,8 @@ public Medico buscar(int id) throws DAOExeption {
             medico.setId(rs.getInt("IDMEDICO"));
             medico.setNombre(rs.getString("NOMBRE"));
             medico.setApellido(rs.getString("APELLIDO"));
-            medico.setPrecioConsulta(rs.getInt("PRECIOCONSULTA"));
+            medico.setPrecioConsulta(rs.getDouble("PRECIOCONSULTA"));
+            medico.setObraSocial(rs.getString("OBRASOCIAL"));
         }
         System.out.println(medico);
     }catch(ClassNotFoundException | SQLException e){
@@ -117,6 +116,7 @@ public Medico buscar(int id) throws DAOExeption {
         Medico medico = null;
 
         ArrayList<Medico> medicos = new ArrayList<>();
+        System.out.println("1");
         try {
             Class.forName(DB_JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL,DB_USER,DB_PASSWORD);
@@ -127,7 +127,8 @@ public Medico buscar(int id) throws DAOExeption {
                 medico.setId(rs.getInt("IDMEDICO"));
                 medico.setNombre(rs.getString("NOMBRE"));
                 medico.setApellido(rs.getString("APELLIDO"));
-                medico.setPrecioConsulta(rs.getInt("PRECIOCONSULTA"));
+                medico.setPrecioConsulta(rs.getDouble("PRECIOCONSULTA"));
+                medico.setObraSocial(rs.getString("OBRASOCIAL"));
                 medicos.add(medico);
             }
         } catch (ClassNotFoundException | SQLException e) {

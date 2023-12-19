@@ -28,7 +28,6 @@ public class serviceMedico {
         }catch (DAOExeption d){
             throw new serviceExeption(d.getMessage());
         }
-         // aca pasaria lo mismo que en guardar pero esta pendiente haccer de la calse anteriori
     }
 
     public void eliminar (int id) throws serviceExeption {

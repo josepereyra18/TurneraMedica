@@ -1,5 +1,6 @@
 package entidades;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -7,51 +8,33 @@ import java.util.List;
 public class Medico extends Usuario{
     private String Especialidad;
     private double PrecioConsulta;
-    private List<Turno> turnosAsignados;
-
-
-
-
-
-
-
-
-
+    private ArrayList<Turno> turnosAsignados;
 
 //? CONSTRUCTORES
 
     public Medico(){
+        this.turnosAsignados = new ArrayList<>();
     }
-    public Medico(int id, String nombre, String apellido ,String especialidad, int precioConsulta) {
-        super(id, nombre,apellido);
+    public Medico(int id, String nombre, String apellido ,String especialidad, int precioConsulta, String obraSocial) {
+        super(id, nombre,apellido, obraSocial);
         this.Especialidad = especialidad;
         this.PrecioConsulta = precioConsulta;
         this.turnosAsignados = new ArrayList<>();
     }
-    public Medico(int id, String nombre, String apellido) {
-        super(id, nombre, apellido);
+    public Medico(int id, String nombre, String apellido,String obraSocial) {
+        super(id, nombre, apellido, obraSocial);
     }
 
-    public Medico(int id, String nombre, String apellido, int precioConsulta) {
-            super(id, nombre, apellido);
+    public Medico(int id, String nombre, String apellido, int precioConsulta,String obraSocial) {
+            super(id, nombre, apellido, obraSocial);
             this.PrecioConsulta= precioConsulta;
+            this.turnosAsignados = new ArrayList<>();
     }
 
 
 
 
 //? METODOS
-    @Override
-    public List<Turno> ConsultarTurnos(Date fecha) {
-        List<Turno> turnosEnFecha = new ArrayList<>();
-        for (Turno turno : this.turnosAsignados) {
-            if (turno.getFecha().equals(fecha)) {
-                turnosEnFecha.add(turno);
-            }
-        }
-        return turnosEnFecha;
-    }
-
     public void asignarTurno (Turno turno){
         turnosAsignados.add(turno);
     }
@@ -66,20 +49,19 @@ public class Medico extends Usuario{
         return turnosEnRango;
     }
 
-
-
-
-
-
-
+    public ArrayList<Time> getHorasTurnos(Date fechaSeleccionada) {
+        ArrayList<Time> horasTurnos = new ArrayList<>();
+        for (Turno turno : this.turnosAsignados) {
+            if (turno.getFecha().equals(fechaSeleccionada)) {
+                horasTurnos.add(turno.getHora());
+            }
+        }
+        return horasTurnos;
+    }
 //? GETTERS
-    public List<Turno> getTurnosAsignados(){
+    public ArrayList<Turno> getTurnosAsignados(){
         return turnosAsignados;
     }
-
-    //public void AsignarConsultorio(Consultorio consultorio, Date fecha){
-    // aca se asigna un consultorio para una fecha
-    //}
 
     public String getEspecialidad() {
         return Especialidad;
@@ -93,9 +75,8 @@ public class Medico extends Usuario{
 
 
 
-
     //? SETTERS
-public void setEspecialidad(String especialidad) {
+    public void setEspecialidad(String especialidad) {
     Especialidad = especialidad;
 }
 
@@ -103,7 +84,7 @@ public void setEspecialidad(String especialidad) {
         PrecioConsulta = precioConsulta;
     }
 
-    public void setTurnosAsignados(List<Turno> turnosAsignados) {
+    public void setTurnosAsignados(ArrayList<Turno> turnosAsignados) {
         this.turnosAsignados = turnosAsignados;
     }
 

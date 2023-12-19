@@ -1,25 +1,22 @@
-package gui.formulariosMedico;
+package gui.formularioInicio.Administracion.formularioPaciente;
 
 import Service.serviceExeption;
-import Service.serviceMedico;
-import entidades.Medico;
+import Service.servicePaciente;
+import entidades.Paciente;
 import gui.PanelManager;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class FormularioMedicoBuscar extends JPanel {
+public class FormularioPacienteBuscar extends JPanel{
 
     JPanel panelBuscar;
     JPanel panelAtras;
-
     PanelManager panel;
-    serviceMedico instance;
-
+    servicePaciente instance;
     JLabel dni;
     JTextField dniText;
     JButton botonBuscar;
@@ -27,10 +24,9 @@ public class FormularioMedicoBuscar extends JPanel {
 
     JButton BuscarTodos;
 
-
-    public FormularioMedicoBuscar(PanelManager panel){
+    public FormularioPacienteBuscar(PanelManager panel){
         this.panel = panel;
-        instance = new serviceMedico();
+        instance = new servicePaciente();
         setLayout(new GridBagLayout());
         armarFormulario();
     }
@@ -95,50 +91,50 @@ public class FormularioMedicoBuscar extends JPanel {
         gbcAtras.anchor = GridBagConstraints.NORTHWEST;
         add(botonAtras, gbcAtras);
 
-
         botonBuscar.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Medico medico = new Medico();
-        String dni = dniText.getText();
-        if (dni.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
-        } else if (!dni.matches("[0-9]+")) {
-            JOptionPane.showMessageDialog(null, "El dni solo puede contener numeros");
-        } else {
-            try {
-                medico = instance.buscar(Integer.parseInt(dniText.getText()));
-                if (medico == null) {
-                    JOptionPane.showMessageDialog(null, "No se encontro el medico solicitado");
-                }else{
-                    panel.mostrar(new FormularioMedicoEncontrado(panel, medico));
-                }
-            } catch (serviceExeption s) {
-                JOptionPane.showMessageDialog(null, s.getMessage());
-            }
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Paciente paciente = new Paciente();
+                String dni = dniText.getText();
+                if (dni.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
+                } else if (!dni.matches("[0-9]+")) {
+                    JOptionPane.showMessageDialog(null, "El dni solo puede contener numeros");
+                } else {
+                    try {
+                        paciente = instance.buscar(Integer.parseInt(dniText.getText()));
+                        if (paciente == null) {
+                            JOptionPane.showMessageDialog(null, "No se encontro el medico solicitado");
+                        }else{
+                            panel.mostrar(new FormularioPacienteEncontrado(panel, paciente));
+                        }
+                    } catch (serviceExeption s) {
+                        JOptionPane.showMessageDialog(null, s.getMessage());
+                    }
 
-        }
-    }
-});
+                }
+            }
+        });
         BuscarTodos.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Medico> medicos = new ArrayList<>();
-                    try {
-                        medicos = instance.buscarTodos();
-                        panel.mostrar(new FormularioListadoMedicos(panel, medicos));
-                    } catch (serviceExeption ex) {
-                        JOptionPane.showMessageDialog(null, ex.getMessage());
-                    }
+                ArrayList<Paciente> pacientes = new ArrayList<>();
+                try {
+                    pacientes = instance.buscarTodos();
+                    panel.mostrar(new FormularioListadoPaciente(panel, pacientes));
+                } catch (serviceExeption ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage());
                 }
+            }
         });
 
         botonAtras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.mostrar(new FormularioMedicoInicio(panel));
+                panel.mostrar(new FormularioPacienteInicio(panel));
             }
         });
 
     }
+
 }

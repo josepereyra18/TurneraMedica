@@ -1,4 +1,4 @@
-package gui.formulariosMedico;
+package gui.formularioInicio.Administracion.formulariosMedico;
 
 import Service.serviceExeption;
 import Service.serviceMedico;
@@ -18,6 +18,7 @@ public class FormularioMedicoEncontrado extends JPanel {
     JLabel apellido;
     JLabel dni;
     JLabel precioConsulta;
+    JLabel ObraSocial;
 
     JPanel panelMedicoEncontrado;
 
@@ -46,11 +47,12 @@ public class FormularioMedicoEncontrado extends JPanel {
         panelBotones = new JPanel();
         panelAtras = new JPanel();
 
-        panelMedicoEncontrado.setLayout(new GridLayout(4,1));
+        panelMedicoEncontrado.setLayout(new GridLayout(5,1));
         nombre= new JLabel("Nombre: " + medico.getNombre());
         apellido= new JLabel("Apellido: " + medico.getApellido());
         dni= new JLabel("DNI: " + medico.getId());
         precioConsulta= new JLabel("Precio Consulta: " + medico.getPrecioConsulta());
+        ObraSocial = new JLabel("Obra Social: " + medico.getObraSocial());
 
 
         panelBotones.setLayout(new GridLayout(1,2));
@@ -75,6 +77,7 @@ public class FormularioMedicoEncontrado extends JPanel {
         botonModificar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 panel.mostrar(new FormularioMedicoModificar(panel, medico));
             }
         });
@@ -104,6 +107,7 @@ public class FormularioMedicoEncontrado extends JPanel {
         panelMedicoEncontrado.add(apellido);
         panelMedicoEncontrado.add(dni);
         panelMedicoEncontrado.add(precioConsulta);
+        panelMedicoEncontrado.add(ObraSocial);
 
         GridBagConstraints gbcInfo = new GridBagConstraints();
         gbcInfo.gridx = 1;

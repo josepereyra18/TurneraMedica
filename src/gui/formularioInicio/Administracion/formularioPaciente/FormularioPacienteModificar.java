@@ -1,8 +1,8 @@
-package gui.formulariosMedico;
+package gui.formularioInicio.Administracion.formularioPaciente;
 
 import Service.serviceExeption;
-import Service.serviceMedico;
-import entidades.Medico;
+import Service.servicePaciente;
+import entidades.Paciente;
 import gui.PanelManager;
 
 import javax.swing.*;
@@ -10,33 +10,29 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FormularioMedicoModificar  extends JPanel {
-
+public class FormularioPacienteModificar extends JPanel {
     JPanel panelModificar;
     JPanel panelAtras;
-
     PanelManager panel;
     JLabel nombre;
     JTextField nombreText;
     JLabel apellido;
     JTextField apellidoText;
-
-    JLabel precioConsulta;
-    JTextField precioConsultaText;
-
+    JLabel ObraSocial;
+    JComboBox combo;
+    private String ObrasSociales[]={"- Seleccione -","OSDE","Swiss Medical","Galeno","Medicus","Accord Salud","OMINT","OSDIPP","OSPATCA","OSPE","OSPIA","OSPOCE","OSSEG","OSUNLAR","OSUTHGRA","Otro"};
     JButton botonModificar;
     JButton botonAtras;
+    servicePaciente instance;
 
-    serviceMedico instance;
-
-    public FormularioMedicoModificar(PanelManager panel, Medico medico) {
+    public FormularioPacienteModificar(PanelManager panel, Paciente paciente) {
         this.panel = panel;
-        instance = new serviceMedico();
+        instance = new servicePaciente();
         setLayout(new GridBagLayout());
-        armarFormulario(medico);
+        armarFormulario(paciente);
     }
 
-    public void armarFormulario(Medico medico){
+    public void armarFormulario(Paciente paciente){
         panelModificar = new JPanel();
         panelAtras = new JPanel();
         panelAtras.setLayout(new GridBagLayout());
@@ -44,15 +40,15 @@ public class FormularioMedicoModificar  extends JPanel {
 
         nombre = new JLabel("Nombre");
         nombreText = new JTextField(7);
-        nombreText.setText(medico.getNombre());
+        nombreText.setText(paciente.getNombre());
 
         apellido = new JLabel("Apellido");
         apellidoText = new JTextField(7);
-        apellidoText.setText(medico.getApellido());
+        apellidoText.setText(paciente.getApellido());
 
-        precioConsulta = new JLabel("Precio Consulta");
-        precioConsultaText = new JTextField(7);
-        precioConsultaText.setText(String.valueOf(medico.getPrecioConsulta()));
+        ObraSocial = new JLabel("Obra Social");
+        combo = new JComboBox(ObrasSociales);
+        combo.setSelectedItem(paciente.getObraSocial());
 
         botonModificar = new JButton("Modificar");
 
@@ -63,8 +59,8 @@ public class FormularioMedicoModificar  extends JPanel {
         panelModificar.add(nombreText);
         panelModificar.add(apellido);
         panelModificar.add(apellidoText);
-        panelModificar.add(precioConsulta);
-        panelModificar.add(precioConsultaText);
+        panelModificar.add(ObraSocial);
+        panelModificar.add(combo);
         panelModificar.add(botonModificar);
 
         GridBagConstraints gbcModificar = new GridBagConstraints();
@@ -85,7 +81,7 @@ public class FormularioMedicoModificar  extends JPanel {
         botonAtras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                panel.mostrar(new FormularioMedicoEncontrado(panel, medico));
+                panel.mostrar(new FormularioPacienteEncontrado(panel, paciente));
             }
         });
 
@@ -94,7 +90,7 @@ public class FormularioMedicoModificar  extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String nombre = nombreText.getText();
                 String apellido = apellidoText.getText();
-                String precioConsulta = precioConsultaText.getText();
+                String obraSocial = combo.getItemAt(combo.getSelectedIndex()).toString();
 
                 if (nombre.isEmpty() || apellido.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
@@ -102,29 +98,30 @@ public class FormularioMedicoModificar  extends JPanel {
                     JOptionPane.showMessageDialog(null, "El nombre solo puede contener letras");
                 } else if (!apellido.matches("[a-zA-Z]+")) {
                     JOptionPane.showMessageDialog(null, "El apellido solo puede contener letras");
-                } else if (!precioConsulta.matches("[0-9]*\\.?[0-9]+")){
-                    JOptionPane.showMessageDialog(null, "El precio de la consulta debe ser un número. Recuerda que los numeros decimales van con punto");
+                } else if(combo.getSelectedIndex()==0){
+                    JOptionPane.showMessageDialog(null, "Debe seleccionarse una obra social");
                 }else {
-                    Medico medicoNuevo= new Medico();
-                    medicoNuevo.setId(medico.getId());
-                    medicoNuevo.setNombre(nombre);
-                    medicoNuevo.setApellido(apellido);
-                    medicoNuevo.setPrecioConsulta(Double.parseDouble(precioConsulta));
+                    Paciente pacienteNuevo= new Paciente();
+                    pacienteNuevo.setId(paciente.getId());
+                    pacienteNuevo.setNombre(nombre);
+                    pacienteNuevo.setApellido(apellido);
+                    pacienteNuevo.setObraSocial(obraSocial);
 
                     try{
-                        instance.modificar(medicoNuevo);
-                        panel.mostrar(new FormularioMedicoBuscar(panel));
+                        instance.modificar(pacienteNuevo);
+                        panel.mostrar(new FormularioPacienteBuscar(panel));
                     }catch (serviceExeption s){
                         JOptionPane.showMessageDialog(null, "No se pudo modificar el medico");
                     }
                     String mensaje = "Se modificó el medico con exito. \n Nuevos datos: \n" +
                             "Nombre: " + nombre + "\n" +
                             "Apellido: " + apellido + "\n" +
-                            "DNI: " + medico.getId()+ "\n" +
-                            "Precio Consulta: " + precioConsulta;
+                            "DNI: " + paciente.getId()+ "\n" +
+                            "Obra Social: " + obraSocial + "\n";
                     JOptionPane.showMessageDialog(null, mensaje);
                 }
             }
         });
     }
+
 }

@@ -1,4 +1,4 @@
-package gui.formulariosMedico;
+package gui.formularioInicio.Administracion.formulariosMedico;
 
 import Service.serviceExeption;
 import Service.serviceMedico;
@@ -32,9 +32,15 @@ public class FormularioMedicoAgregar extends JPanel {
     JLabel precioConsulta;
     JTextField precioConsultaText;
 
+    JLabel ObraSocial;
+    JComboBox combo;
+
+
     JButton botonAgregar;
 
     serviceMedico instance;
+
+    private String ObrasSociales[]={"- Seleccione -","OSDE","Swiss Medical","Galeno","Medicus","Accord Salud","OMINT","OSDIPP","OSPATCA","OSPE","OSPIA","OSPOCE","OSSEG","OSUNLAR","OSUTHGRA","Otro"};
 
 
     public FormularioMedicoAgregar (PanelManager panel){
@@ -48,7 +54,7 @@ public class FormularioMedicoAgregar extends JPanel {
 
         panelAgregar = new JPanel();
         panelSec = new JPanel();
-        panelAgregar.setLayout(new GridLayout(5,2, 5, 5));
+        panelAgregar.setLayout(new GridLayout(6,2, 5, 5));
 
         botonAtras = new JButton("<-");
         botonAtras.setPreferredSize(new Dimension(50, 25));
@@ -65,6 +71,9 @@ public class FormularioMedicoAgregar extends JPanel {
         precioConsulta = new JLabel("Precio Consulta");
         precioConsultaText = new JTextField(7);
 
+        ObraSocial = new JLabel("Obra Social");
+        combo = new JComboBox(ObrasSociales);
+
         botonAgregar = new JButton("Agregar");
 
 
@@ -75,6 +84,7 @@ public class FormularioMedicoAgregar extends JPanel {
                     String apellido = apellidoText.getText();
                     String dni = dniText.getText();
                     String precioConsulta = precioConsultaText.getText();
+                    String obraSocial = combo.getItemAt(combo.getSelectedIndex()).toString();
 
                     if (nombre.isEmpty() || apellido.isEmpty() || dni.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos");
@@ -86,27 +96,32 @@ public class FormularioMedicoAgregar extends JPanel {
                         JOptionPane.showMessageDialog(null, "El DNI solo puede contener números");
                     } else if (!precioConsulta.matches("[0-9]*\\.?[0-9]+")){
                         JOptionPane.showMessageDialog(null, "El precio de la consulta debe ser un número. Recuerda que los numeros decimales van con punto");
+                    }else if(combo.getSelectedIndex()==0){
+                        JOptionPane.showMessageDialog(null, "Debe seleccionarse una obra social");
                     }else {
                         Medico medico = new Medico();
                         medico.setNombre(nombre);
                         medico.setApellido(apellido);
                         medico.setId(Integer.parseInt(dni));
                         medico.setPrecioConsulta(Double.parseDouble(precioConsulta));
+                        medico.setObraSocial(obraSocial);
                         try{
                             instance.guardar(medico);
+                            String mensaje = "Se agregó el medico con exito. Datos: \n" +
+                                    "Nombre: " + nombre + "\n" +
+                                    "Apellido: " + apellido + "\n" +
+                                    "DNI: " + dni+ "\n" +
+                                    "Precio Consulta: " + precioConsulta+
+                                    "Obra Social: " + obraSocial;
+                            JOptionPane.showMessageDialog(null, mensaje);
                         }catch (serviceExeption s){
                             JOptionPane.showMessageDialog(null, "No se pudo agregar el medico");
                         }
-                        String mensaje = "Se agregó el medico con exito. Datos: \n" +
-                                "Nombre: " + nombre + "\n" +
-                                "Apellido: " + apellido + "\n" +
-                                "DNI: " + dni+ "\n" +
-                                "Precio Consulta: " + precioConsulta;
-                        JOptionPane.showMessageDialog(null, mensaje);
                         nombreText.setText("");
                         apellidoText.setText("");
                         dniText.setText("");
                         precioConsultaText.setText("");
+                        combo.setSelectedIndex(0);
                     }
             }
         });
@@ -118,15 +133,6 @@ public class FormularioMedicoAgregar extends JPanel {
             }
         });
 
-
-        //botonAgregar.addActionListener(e -> {
-            //try {
-            //    panel.getServiceMedico().agregarMedico(nombreText.getText(), apellidoText.getText(), dniText.getText());
-            //    JOptionPane.showMessageDialog(null, "Medico agregado con exito");
-           // } catch (Exception exception) {
-            //    JOptionPane.showMessageDialog(null, exception.getMessage());
-            //}
-        //});
         panelAgregar.add(nombre);
         panelAgregar.add(nombreText);
         panelAgregar.add(apellido);
@@ -135,6 +141,8 @@ public class FormularioMedicoAgregar extends JPanel {
         panelAgregar.add(dniText);
         panelAgregar.add(precioConsulta);
         panelAgregar.add(precioConsultaText);
+        panelAgregar.add(ObraSocial);
+        panelAgregar.add(combo);
         panelAgregar.add(botonAgregar);
 
         GridBagConstraints gbc = new GridBagConstraints();
